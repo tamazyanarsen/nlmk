@@ -8,5 +8,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="tfjs-vis.umd" level="application" />
+    <orderEntry type="library" name="tf" level="application" />
+    <orderEntry type="library" name="Chart" level="application" />
   </component>
 </module>

@@ -6,45 +6,26 @@
     <!-- https://electronjs.org/docs/tutorial/security#csp-meta-tag -->
     <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" /> -->
     <meta http-equiv="Content-Security-Policy"
-        content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'" />
+          content="default-src *; style-src 'self' http://* 'unsafe-inline'; script-src 'self' http://* 'unsafe-inline' 'unsafe-eval'"/>
 </head>
 
 <body>
-    <script>document.write(process.versions.node)</script>
-    <script>document.write(process.versions.chrome)</script>
-    <script>document.write(process.versions.electron)</script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+<script>document.write(process.versions.node)</script>
+<script>document.write(process.versions.chrome)</script>
+<script>document.write(process.versions.electron)</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 
-    <canvas id="myChart" width="400" height="400"></canvas>
+<!-- Import TensorFlow.js -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.0/dist/tf.min.js"></script>
+<!-- Import tfjs-vis -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.0.2/dist/tfjs-vis.umd.min.js"></script>
 
-    <script>
-        var ctx = document.getElementById('myChart').getContext('2d');
-        const { ipcRenderer } = require('electron');
-        ipcRenderer.on('data', (evt, msg) => {
-            console.log(msg);
-            var myChart = new Chart(ctx, {
-                type: 'scatter',
-                data: {
-                    // labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                    datasets: [{
-                        label: '# of Votes',
-                        data: msg[0],
-                        borderWidth: 1,
-                        showLine: true
-                    }]
-                },
-                options: {
-                    scales: {
-                        xAxes: [{
-                            type: 'linear',
-                            position: 'bottom'
-                        }]
-                    }
-                }
-            });
-        });
-        ipcRenderer.send('get data', true);
-    </script>
+
+<canvas id="myChart"
+        width="400"
+        height="400"></canvas>
+
+<script src="script.js"></script>
 </body>
 
 </html>

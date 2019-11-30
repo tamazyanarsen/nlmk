@@ -99,8 +99,8 @@ function readFileArc(tempData = {}) {
             }
             // console.log(newArc2);
             const keys = Object.keys(tempData).filter(e => e in newArc1 && e in newArc2);
-            const tempArc1 = keys.map(e => ({ x: tempData[e], y: newArc1[e] }));
-            const tempArc2 = keys.map(e => ({ x: tempData[e], y: newArc2[e] }));
+            const tempArc1 = keys.map(e => ({ y: tempData[e], x: newArc1[e] }));
+            const tempArc2 = keys.map(e => ({ y: tempData[e], x: newArc2[e] }));
             console.log('try emit data to render process');
             ipcMain.on('get data', (evt, data) => { evt.reply('data', [tempArc1, tempArc2]) });
             // console.log(win.webContents.send);
