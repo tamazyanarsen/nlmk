@@ -48,6 +48,7 @@ function convertToTensor(data) {
 }
 
 async function trainModel(model, inputs, labels) {
+    console.log('start train');
     // Prepare the model for training.
     model.compile({
         optimizer: tf.train.adam(),
@@ -65,13 +66,14 @@ async function trainModel(model, inputs, labels) {
         callbacks: tfvis.show.fitCallbacks(
             { name: 'Training Performance' },
             ['loss', 'mse'],
-            { height: 200, callbacks: ['onEpochEnd'] }
+            { height: 200, callbacks: ['onEpochEnd'] } // 'onBatchEnd'
         )
     });
 }
 
 function testModel(model, inputData, normalizationData) {
-    const {inputMax, inputMin, labelMin, labelMax} = normalizationData;
+    console.log('start test');
+    const { inputMax, inputMin, labelMin, labelMax } = normalizationData;
 
     // Generate predictions for a uniform range of numbers between 0 and 1;
     // We un-normalize the data by doing the inverse of the min-max scaling
@@ -95,15 +97,15 @@ function testModel(model, inputData, normalizationData) {
 
 
     const predictedPoints = Array.from(xs).map((val, i) => {
-        return {x: val, y: preds[i]}
+        return { x: val, y: preds[i] }
     });
 
     console.log('predictedPoints', predictedPoints);
 
     // inputData [{x: 1, y: 1}]
     tfvis.render.scatterplot(
-        {name: 'Model Predictions vs Original Data'},
-        {values: [inputData, predictedPoints], series: ['original', 'predicted']},
+        { name: 'Model Predictions vs Original Data' },
+        { values: [inputData, predictedPoints], series: ['original', 'predicted'] },
         {
             xLabel: 'Arc1 - Temp',
             yLabel: 'Temp',
