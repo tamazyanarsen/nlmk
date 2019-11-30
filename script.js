@@ -98,6 +98,8 @@ function testModel(model, inputData, normalizationData) {
         return {x: val, y: preds[i]}
     });
 
+    console.log('predictedPoints', predictedPoints);
+
     // inputData [{x: 1, y: 1}]
     tfvis.render.scatterplot(
         {name: 'Model Predictions vs Original Data'},
