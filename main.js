@@ -1,3 +1,58 @@
+const { app, BrowserWindow } = require('electron')
+
+// Храните глобальную ссылку на объект окна, если вы этого не сделаете, окно будет
+// автоматически закрываться, когда объект JavaScript собирает мусор.
+let win
+
+function createWindow () {
+    // Создаём окно браузера.
+    win = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences: {
+            nodeIntegration: true
+        }
+    })
+
+    // и загрузить index.html приложения.
+    win.loadFile('index.html')
+
+    // Отображаем средства разработчика.
+    win.webContents.openDevTools()
+
+    // Будет вызвано, когда окно будет закрыто.
+    win.on('closed', () => {
+        // Разбирает объект окна, обычно вы можете хранить окна
+        // в массиве, если ваше приложение поддерживает несколько окон в это время,
+        // тогда вы должны удалить соответствующий элемент.
+        win = null
+    })
+}
+
+// Этот метод будет вызываться, когда Electron закончит
+// инициализацию и готов к созданию окон браузера.
+// Некоторые API могут использоваться только после возникновения этого события.
+app.on('ready', createWindow)
+
+// Выходим, когда все окна будут закрыты.
+app.on('window-all-closed', () => {
+    // Для приложений и строки меню в macOS является обычным делом оставаться
+    // активными до тех пор, пока пользователь не выйдет окончательно используя Cmd + Q
+    if (process.platform !== 'darwin') {
+        app.quit()
+    }
+})
+
+app.on('activate', () => {
+    // На MacOS обычно пересоздают окно в приложении,
+    // после того, как на иконку в доке нажали и других открытых окон нету.
+    if (win === null) {
+        createWindow()
+    }
+})
+
+const { ipcMain } = require('electron')
+
 const parse = require('csv-parse');
 const fs = require('fs');
 
@@ -42,8 +97,9 @@ function readFileArc(tempData = {}) {
             }
             // console.log(newArc2);
             const keys = Object.keys(tempData).filter(e => e in newArc1 && e in newArc2);
-            const tempArc1 = keys.map(e => ([tempData[e], newArc1[e]]));
-            const tempArc2 = keys.map(e => ([tempData[e], newArc2[e]]));
+            const tempArc1 = keys.map(e => ({x: tempData[e], y: newArc1[e]}));
+            const tempArc2 = keys.map(e => ({x: tempData[e], y: newArc2[e]}));
+            ipcMain.emit('data', [tempArc1, tempArc2]);
         });
     });
 }
