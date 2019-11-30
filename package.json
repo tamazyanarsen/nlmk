@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "chart.js": "^2.9.3",
     "csv": "^5.3.0"
   },
   "devDependencies": {

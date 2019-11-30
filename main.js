@@ -4,7 +4,7 @@ const { app, BrowserWindow } = require('electron')
 // автоматически закрываться, когда объект JavaScript собирает мусор.
 let win
 
-function createWindow () {
+function createWindow() {
     // Создаём окно браузера.
     win = new BrowserWindow({
         width: 800,
@@ -88,18 +88,23 @@ function readFileArc(tempData = {}) {
             for (let i = 0; i <= lastKey; i++) {
                 let t = output.filter(e => +e[0] === i).map(e => +e[3]);
                 if (t.length) {
-                    newArc1[i] = Math.max(...t);
+                    // newArc1[i] = Math.max(...t);
+                    newArc1[i] = t.reduce((a, b) => a + b, 0);
                 }
                 t = output.filter(e => +e[0] === i).map(e => +e[4]);
                 if (t.length) {
-                    newArc2[i] = Math.max(...t);
+                    // newArc2[i] = Math.max(...t);
+                    newArc2[i] = t.reduce((a, b) => a + b, 0);
                 }
             }
             // console.log(newArc2);
             const keys = Object.keys(tempData).filter(e => e in newArc1 && e in newArc2);
-            const tempArc1 = keys.map(e => ({x: tempData[e], y: newArc1[e]}));
-            const tempArc2 = keys.map(e => ({x: tempData[e], y: newArc2[e]}));
-            ipcMain.emit('data', [tempArc1, tempArc2]);
+            const tempArc1 = keys.map(e => ({ x: tempData[e], y: newArc1[e] }));
+            const tempArc2 = keys.map(e => ({ x: tempData[e], y: newArc2[e] }));
+            console.log('try emit data to render process');
+            ipcMain.on('get data', (evt, data) => { evt.reply('data', [tempArc1, tempArc2]) });
+            // console.log(win.webContents.send);
+            // win.webContents.send('data', [tempArc1, tempArc2]);
         });
     });
 }
