@@ -59,14 +59,23 @@ async function trainModel(model, inputs, labels) {
     const batchSize = 32;
     const epochs = 50;
 
+    function onBatchEnd(batch, logs) {
+        // console.log('Accuracy', logs.acc);
+    }
+
+    function onEpochEnd(epoch, logs) {
+        console.log('Accuracy', logs.acc);
+    }
+
     return await model.fit(inputs, labels, {
         batchSize,
         epochs,
         shuffle: true,
+        // callbacks: {onBatchEnd, onEpochEnd}
         callbacks: tfvis.show.fitCallbacks(
             { name: 'Training Performance' },
-            ['loss', 'mse', 'accuracy'],
-            { height: 200, callbacks: ['onEpochEnd'] } // 'onBatchEnd'
+            ['loss', 'mse', 'acc'],
+            { height: 200, callbacks: ['onEpochEnd'] } // ['onBatchEnd', ]
         )
     });
 }
