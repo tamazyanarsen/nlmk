@@ -20,7 +20,7 @@ function convertToTensor(data) {
         tf.util.shuffle(data);
 
         // Step 2. Convert data to Tensor
-        const inputs = data.map(d => d.x)
+        const inputs = data.map(d => d.x);
         const labels = data.map(d => d.y);
 
         const inputTensor = tf.tensor2d(inputs, [inputs.length, 1]);
@@ -141,7 +141,8 @@ async function run(msg = []) {
     const { inputs, labels } = tensorData;
 
     // Train the model
-    await trainModel(model, inputs, labels);
+    const trainInfo = await trainModel(model, inputs, labels);
+    console.log(trainInfo);
     console.log('Done Training');
 
     testModel(model, values, tensorData);
