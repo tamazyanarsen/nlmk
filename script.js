@@ -53,7 +53,7 @@ async function trainModel(model, inputs, labels) {
     model.compile({
         optimizer: tf.train.adam(),
         loss: tf.losses.meanSquaredError,
-        metrics: ['mse'],
+        metrics: ['mse', 'accuracy'],
     });
 
     const batchSize = 32;
@@ -65,7 +65,7 @@ async function trainModel(model, inputs, labels) {
         shuffle: true,
         callbacks: tfvis.show.fitCallbacks(
             { name: 'Training Performance' },
-            ['loss', 'mse'],
+            ['loss', 'mse', 'accuracy'],
             { height: 200, callbacks: ['onEpochEnd'] } // 'onBatchEnd'
         )
     });
