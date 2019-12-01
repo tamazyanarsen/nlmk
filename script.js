@@ -137,7 +137,7 @@ async function run(msg = []) {
     const model = createModel();
     tfvis.show.modelSummary({ name: 'Model Summary' }, model);
 
-    const tensorData = convertToTensor(values);
+    const tensorData = convertToTensor(values.slice(0, values.length - 100));
     const { inputs, labels } = tensorData;
 
     // Train the model
@@ -145,7 +145,7 @@ async function run(msg = []) {
     console.log(trainInfo);
     console.log('Done Training');
 
-    testModel(model, values, tensorData);
+    testModel(model, values.slice(values.length - 100), tensorData);
 }
 
 const ctx = document.getElementById('myChart').getContext('2d');
